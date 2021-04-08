@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,400i,500" rel="stylesheet">
+    <link href="/static/css/socicon.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/static/css/entypo.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/static/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='//fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168666784-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-168666784-1');
+    </script>
+    <style>
+        .bd-example-modal-lg .modal-dialog {
+            display: table;
+            position: relative;
+            margin: 0 auto;
+            top: calc(50% - 24px);
+        }
+        
+        .bd-example-modal-lg .modal-dialog .modal-content {
+            background-color: transparent;
+            border: none;
+        }
+    </style>
+    
+    <link href="https://unpkg.com/easy-autocomplete@1.3.5/dist/easy-autocomplete.min.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/easy-autocomplete@1.3.5/dist/jquery.easy-autocomplete.js"></script>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="width: 48px">
+                    <span class="text-light fa fa-spinner fa-spin fa-3x"></span>
+                </div>
+                <p class="text-light">Loading...</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <div class="main-container">
+            {% include '/includes/_messages.html' %}
+
+           {% block body %}
+           
+           {% endblock %}
+        </div>
+    </div>
+</script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#myToast").toast('show');
+        });
+    </script>
+    <script>
+        function modal() {
+            $('.modal').modal('show');
+            return true;
+        }
+        var FirstLoading = true;
+
+        function RestoreSubmitButton() {
+            if (FirstLoading) {
+                FirstLoading = false;
+                return;
+            }
+            $('.modal').modal('hide');
+        }
+        document.onfocus = RestoreSubmitButton;
+    </script>
+
+
+    <!-- Required vendor scripts (Do not remove) -->
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/popper.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <!-- Optional Vendor Scripts (Remove the plugin script here and comment initializer script out of index.js if site does not use that feature) -->
+    <!-- AOS (Animate On Scroll - animates elements into view while scrolling down) -->
+    <script type="text/javascript" src="/static/js/aos.js"></script>
+    <!-- Flatpickr (calendar/date/time picker UI) -->
+    <script type="text/javascript" src="/static/js/flatpickr.min.js"></script>
+    <!-- Flickity (handles touch enabled carousels and sliders) -->
+    <script type="text/javascript" src="/static/js/flickity.pkgd.min.js"></script>
+    <!-- jarallax (parallax effect and video backgrounds) -->
+    <script type="text/javascript" src="/static/js/jarallax.min.js"></script>
+    <script type="text/javascript" src="/static/js/jarallax-video.min.js"></script>
+    <script type="text/javascript" src="/static/js/jarallax-element.min.js"></script>
+    <!-- ScrollMonitor (manages events for elements scrolling in and out of view) -->
+    <script type="text/javascript" src="/static/js/scrollMonitor.js"></script>
+    <!-- jQuery smartWizard facilitates steppable wizard content -->
+    <script type="text/javascript" src="/static/js/jquery.smartWizard.min.js"></script>
+    <!-- Smooth scroll (animation to links in-page)-->
+    <script type="text/javascript" src="/static/js/smooth-scroll.polyfills.min.js"></script>
+    <!-- Prism (displays formatted code boxes) -->
+    <script type="text/javascript" src="/static/js/prism.js"></script>
+    <script type="text/javascript" src="/static/js/zoom.min.js"></script>
+    <!-- Required theme scripts (Do not remove) -->
+    <script type="text/javascript" src="/static/js/theme.js"></script>
+    <!--For Eff Calc-->
+    <script>
+        $('input').on("keyup", function() {
+            //$("#result").val(parseInt($("#tickets").val(), 10) * 15);
+            $("#result").val(((($("#tickets").val()) * ($("#bcollar").val() / 100 * .27 + $("#wcollar").val() / 100 * .09)) * (15.3 / 60)).toFixed(2));
+
+            $("#nresult").val((($("#tickets").val()) * ($("#bcollar").val() / 100 * .27 + $("#wcollar").val() / 100 * .09)).toFixed(2));
+
+            $("#result2").val(($("#result").val() / ($("#techs").val() * 40 * 4.43) * 100).toFixed(2));
+
+            $("#fte").val(($("#result").val() / (40 * 4.43)).toFixed(2));
+        });
+    </script>
+</body>
+
+</html>

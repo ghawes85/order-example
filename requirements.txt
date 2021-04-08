@@ -1,0 +1,16 @@
+WTForms==2.3.3
+Flask==1.1.2
+Flask-WTF==0.14.3
+pyodbc==4.0.28
+requests==2.22.0
+
+python-dotenv==0.10.5
+secure==0.2.1
+pytest==5.4.3
+pytest-cov==2.10.0
+pytest-sugar==0.9.4
+black==20.8b1
+pylint==2.6.0
+pylint-flask==0.6
+pylint-flask-sqlalchemy==0.2.0
+pylint-plugin-utils==0.6
