@@ -43,14 +43,16 @@ def orders():
     
     form.vendor.choices = ['Ven1', 'Ven2']
 
-
+    print(request.method)
     if request.method == 'POST':
         print('Need the list of products added returned here')
-        
+        print('*'*100)
+        print(form.vendor.data)
+        print('*'*100)
 
     return render_template(
         "orders.html",
-        title="Orders",
         form=form,
+        title="Orders",
     )
 
