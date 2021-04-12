@@ -4,6 +4,7 @@
 import os
 import urllib.parse
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
 
 
 class Config:
@@ -19,6 +20,10 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     SECRET_KEY = 'TYHskdnwikdfndeifngeriwgnerog'
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'database.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    print(SQLALCHEMY_DATABASE_URI)
+
 
 
 class TestingConfig(Config):
