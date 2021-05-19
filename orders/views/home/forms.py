@@ -19,6 +19,6 @@ class OrderForm(FlaskForm):
     enduser = StringField("Specific End User")
     extra_details = TextAreaField("Extra Details")
     specs = TextAreaField("Specification Requirements")
-    submit2 = SubmitField("Submit")
+    submit = SubmitField("Submit")
 
 

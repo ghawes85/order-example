@@ -23,6 +23,7 @@ class Item(db.Model):
     @property
     def serialize(self):
         return {
+            "id": self.id,
 	        "enduser": self.quantity,
 			"extra_details": self.extra_details,
 			"specs": self.specs,

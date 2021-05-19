@@ -57,7 +57,7 @@ def order_items():
     except Exception as e:
         print(e)
         return jsonify({"msg": "failed to add item"}), 500
-    return jsonify({"msg": "success"})
+    return jsonify(new_item.serialize)
 
 
 @main.route("/", methods=["Get", "Post"])
@@ -72,16 +72,32 @@ def orders():
         for item in items:
             print(item.serialize)
 
-    # Clear Items after Order has been created
-    try:
-        deleted_rows = db.session.query(Item).delete()
-        db.session.commit()
-        print(deleted_rows)
-    except Exception as e:
-        db.session.rollback()
+        # Clear Items after Order has been created
+        try:
+            deleted_rows = db.session.query(Item).delete()
+            db.session.commit()
+            print(deleted_rows)
+        except Exception as e:
+            db.session.rollback()
 
+    # Get existing items to display on table
+    _orders = db.session.query(Item).all()
     return render_template(
         "orders.html",
         form=form,
+        orders_ =_orders,
         title="Orders",
     )
+
+@main.route("/orders/items/<int:item_id>", methods=["DELETE"])
+def delete_item(item_id):
+    try:
+        db.session.query(Item).filter_by(id=item_id).delete()
+        db.session.commit()
+    except: 
+        raise "something went wrong"
+
+    return jsonify({
+        "msg": "Item deleted successfully",
+        "success": True
+    })
