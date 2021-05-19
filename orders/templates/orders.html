@@ -87,6 +87,7 @@
 																	<td>Lenovo</td>
 																	<td>5632SD3</td>
 																	<td>3</td>
+																	<td class="d-none id"></td>
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
@@ -95,6 +96,29 @@
 																				title="Delete"></i></span>
 																	</td>
 																</tr>
+																{% for item in orders_ %}
+																<tr>
+																	<td>
+																		<span class="custom-checkbox">
+																			<input type="checkbox" id="checkbox1"
+																				name="options[]" value="1">
+																			<label for="checkbox1"></label>
+																		</span>
+																	</td>
+																	<td>{{item.vendor}}</td>
+																	<td>{{ item.part }}</td>
+																	<td>{{item.quantity }}</td>
+																	<td class="d-none id">{{item.id}}</td>
+																	<td class="d-none"></td>
+																	<td class="d-none"></td>
+																	<td class="d-none"></td>
+																	<td text-align="center" onclick="deleteRow(this)">
+																		<span class="delete"><i class="icon-trash"
+																				title="Delete"></i></span>
+																	</td>
+																</tr>
+																{% endfor %}
+
 
 															</tbody>
 														</table>
@@ -174,14 +198,7 @@
 														</div>
 													</div>
 												</div>
-
-
-
-
-
-
 											</div>
-
 											{{ form.submit2(class="btn btn-lg btn-primary") }}
 										</div>
 										<!--end of col-->
@@ -191,6 +208,8 @@
 
 
 								</div>
+								
+
 						</form>
 
 					</div>
@@ -215,8 +234,6 @@
 <script type="text/javascript">
 	localStorage.setItem("items", JSON.stringify([]))
 	const productslist = []
-
-
 	function displayResult() {
 		let vendor_select = document.getElementById('vendor');
 		let part_select = document.getElementById('part');
@@ -234,27 +251,45 @@
 			"part": part_select.value,
 			"vendor": vendor_select.value
 		}
-		
+
 		fetch('/orders/items', {
 			method: "POST",
 			body: JSON.stringify(data),
-			headers: {"Content-type": "application/json; charset=UTF-8"}
+			headers: { "Content-type": "application/json; charset=UTF-8" }
 		})
-		.then(response => response.json()) 
-		.then(json => {
-			document.getElementById("myTable").insertRow(-1).innerHTML = '<td><span class="custom-checkbox"><input type="checkbox" id="checkbox1" name="options[]" value="1"><label for="checkbox1"></label></span></td><td>'
-			+ vendor_select.value + '</td><td>' + part_select.value + '<td class="d-none">' + enduser_select.value + '</td><td class="d-none">' + details_select.value + '</td><td class="d-none">' + specs_select.value
-			+ '</td><td>' + quantity_select.value + '</td><td text-align="center" onclick="deleteRow(this)"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>';
-		})
-		.catch(err => console.log(err));
-
-		
+			.then(response => response.json())
+			.then(json => {
+				console.log(json)
+				document.getElementById("myTable").insertRow(-1).innerHTML =
+					`<td><span class="custom-checkbox">
+				<input type="checkbox" id="checkbox1" name="options[]" value="1">
+				<label for="checkbox1"></label>
+				</span>
+			</td>
+			<td> ${vendor_select.value}  </td>
+			<td> ${part_select.value}
+		   <td class="d-none"> ${enduser_select.value}  </td>  
+		   <td class="d-none">  ${details_select.value}  </td> 
+		   <td class="d-none">  ${specs_select.value}  </td>  
+		   <td> + ${quantity_select.value}  </td> 
+		   <td text-align="center" onclick="deleteRow(this)"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>`;
+			})
+			.catch(err => console.log(err));
 	}
 
-	console.log(productslist)
-
 	function deleteRow(ctl) {
-		$(ctl).parents("tr").remove();
+		var id = $(ctl).parents("tr").find('.id').text()
+		fetch(`/orders/items/${id}`, {
+			method: "DELETE"
+		})
+		.then(response => response.json())
+		.then(resp => {
+			$(ctl).parents("tr").remove();
+		})
+		.catch(err => {
+			alert("Something Went wrong when deleting item with id " + id)
+		})
+		
 	}
 </script>
 
@@ -283,8 +318,4 @@
 		});
 	});
 </script>
-
-
-
-
 {% endblock %}
