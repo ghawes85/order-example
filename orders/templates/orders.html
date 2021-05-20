@@ -112,7 +112,7 @@
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
-																	<td text-align="center" onclick="deleteRow(this)">
+																	<td text-align="center">
 																		<span class="delete"><i class="icon-trash"
 																				title="Delete"></i></span>
 																	</td>
@@ -273,24 +273,28 @@
 		   <td class="d-none">  ${specs_select.value}  </td>  
 		   <td> + ${quantity_select.value}  </td> 
 		   <td text-align="center" onclick="deleteRow(this)"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>`;
+		   location.reload();
 			})
 			.catch(err => console.log(err));
 	}
 
-	function deleteRow(ctl) {
-		var id = $(ctl).parents("tr").find('.id').text()
+	$( document ).ready(function() {
+		$("#myTable").on('click','.delete',function(){
+		var id = $(this).parents("tr").find('.id').text()
+		console.log(id)
 		fetch(`/orders/items/${id}`, {
 			method: "DELETE"
 		})
 		.then(response => response.json())
 		.then(resp => {
-			$(ctl).parents("tr").remove();
+			$(this).closest('tr').remove();
 		})
 		.catch(err => {
 			alert("Something Went wrong when deleting item with id " + id)
 		})
 		
-	}
+    });
+	})
 </script>
 
 <script type="text/javascript">
