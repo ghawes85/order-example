@@ -91,7 +91,7 @@
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
-																	<td text-align="center" onclick="deleteRow(this)">
+																	<td text-align="center">
 																		<span class="delete"><i class="icon-trash"
 																				title="Delete"></i></span>
 																	</td>
@@ -191,8 +191,8 @@
 															<div class="modal-footer">
 																<input type="button" class="btn btn-default"
 																	data-dismiss="modal" value="Cancel">
-																<input type="button" class="btn btn-success" value="Add"
-																	data-dismiss="modal" onclick="displayResult()">
+																<input type="button" class="btn btn-success additem" value="Add"
+																	data-dismiss="modal">
 															</div>
 
 														</div>
@@ -208,7 +208,7 @@
 
 
 								</div>
-								
+
 
 						</form>
 
@@ -222,19 +222,13 @@
 		<!--end of container-->
 	</section>
 	<!--end of section-->
-
-
-
-
-
 </div>
 
 
 
 <script type="text/javascript">
-	localStorage.setItem("items", JSON.stringify([]))
-	const productslist = []
-	function displayResult() {
+	$(document).ready(function () {
+		$(".additem").click(function () {
 		let vendor_select = document.getElementById('vendor');
 		let part_select = document.getElementById('part');
 		let quantity_select = document.getElementById('quantity');
@@ -243,58 +237,57 @@
 		let details_select = document.getElementById('extra_details');
 		let specs_select = document.getElementById('specs');
 
-		data = {
+		let newItem = {
 			"enduser": enduser_select.value,
 			"extra_details": details_select.value,
 			"specs": specs_select.value,
 			"quantity": quantity_select.value,
 			"part": part_select.value,
-			"vendor": vendor_select.value
+			"vendor": vendor_select.value,
 		}
 
 		fetch('/orders/items', {
 			method: "POST",
-			body: JSON.stringify(data),
+			body: JSON.stringify(newItem),
 			headers: { "Content-type": "application/json; charset=UTF-8" }
 		})
-			.then(response => response.json())
-			.then(json => {
-				console.log(json)
-				document.getElementById("myTable").insertRow(-1).innerHTML =
-					`<td><span class="custom-checkbox">
-				<input type="checkbox" id="checkbox1" name="options[]" value="1">
-				<label for="checkbox1"></label>
-				</span>
-			</td>
-			<td> ${vendor_select.value}  </td>
-			<td> ${part_select.value}
-		   <td class="d-none"> ${enduser_select.value}  </td>  
-		   <td class="d-none">  ${details_select.value}  </td> 
-		   <td class="d-none">  ${specs_select.value}  </td>  
-		   <td> + ${quantity_select.value}  </td> 
-		   <td text-align="center" onclick="deleteRow(this)"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>`;
-		   location.reload();
-			})
-			.catch(err => console.log(err));
-	}
-
-	$( document ).ready(function() {
-		$("#myTable").on('click','.delete',function(){
-		var id = $(this).parents("tr").find('.id').text()
-		console.log(id)
-		fetch(`/orders/items/${id}`, {
-			method: "DELETE"
-		})
 		.then(response => response.json())
-		.then(resp => {
-			$(this).closest('tr').remove();
-		})
-		.catch(err => {
-			alert("Something Went wrong when deleting item with id " + id)
-		})
+		.then(data => {
+				document.getElementById("myTable").insertRow(-1).innerHTML =
+				`<td>
+						<span class="custom-checkbox">
+							<input type="checkbox" id="checkbox1" name="options[]" value="1">
+							<label for="checkbox1"></label>
+						</span>
+				</td>
+				<td> ${data.vendor}  </td>
+				<td> ${data.part} </td>
+				<td class="d-none id">${data.id}</td>
+				<td class="d-none"> ${data.enduser}  </td>  
+				<td class="d-none">  ${data.extra_details}  </td> 
+				<td class="d-none">  ${data.specs}  </td>  
+				<td> ${data.quantity}  </td> 
+				<td text-align="center"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>`;
+			})
+		.catch(err => console.log(err));
 		
-    });
 	})
+
+	$("#myTable").on('click', '.delete', function () {
+			var id = $(this).parents("tr").find('.id').text()
+			console.log(id)
+			 fetch(`/orders/items/${id}`, {
+				method: "DELETE"
+			})
+				.then(response => response.json())
+				.then(resp => {
+					$(this).closest('tr').remove();
+				})
+				.catch(err => {
+					alert("Something Went wrong when deleting item with id " + id)
+				})
+		});
+})
 </script>
 
 <script type="text/javascript">
