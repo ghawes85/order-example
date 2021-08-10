@@ -95,12 +95,12 @@ def update_items(id):
     existing_item = db.session.query(Item).filter_by(id=id).first()
 
     if request.method == "PATCH":
-        existing_item.quantity = int(item["quantity"]),
-        existing_item.user_id = 2,
-        existing_item.enduser = item["enduser"],
-        existing_item.extra_details= item["extra_details"],
-        existing_item.specs = item["specs"],
-        existing_item.part = item["part"],
+        existing_item.quantity = int(item["quantity"])
+        existing_item.user_id = 2
+        existing_item.enduser = item["enduser"]
+        existing_item.extra_details= item["extra_details"]
+        existing_item.specs = item["specs"]
+        existing_item.part = item["part"]
         existing_item.vendor = item["vendor"]        
         db.session.commit()
 
