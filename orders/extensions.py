@@ -1,3 +1,4 @@
-from secure import SecureHeaders
+"""from secure import SecureHeaders
 
 secure_headers = SecureHeaders()
+"""

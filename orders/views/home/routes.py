@@ -17,17 +17,17 @@ from flask import (
 )
 from flask_login import login_required
 from flask_mail import Message
-from orders.extensions import secure_headers
+#from orders.extensions import secure_headers
 from orders.views.home.forms import OrderForm
 from orders.model import Item, db
 from orders.views.home import main
 
 #main = Blueprint("main",__name__)
 
-@main.after_request
+"""@main.after_request
 def set_secure_headers(response):
     secure_headers.flask(response)
-    return response
+    return response"""
 
 
 @main.app_errorhandler(404)
@@ -89,12 +89,32 @@ def orders():
         title="Orders",
     )
 
+@main.route("/orders/items/<id>", methods=["GET", "PATCH"])
+def update_items(id):
+    item = request.get_json()
+    existing_item = db.session.query(Item).filter_by(id=id).first()
+
+    if request.method == "PATCH":
+        existing_item.quantity = int(item["quantity"]),
+        existing_item.user_id = 2,
+        existing_item.enduser = item["enduser"],
+        existing_item.extra_details= item["extra_details"],
+        existing_item.specs = item["specs"],
+        existing_item.part = item["part"],
+        existing_item.vendor = item["vendor"]        
+        db.session.commit()
+
+        return jsonify(existing_item.serialize)    
+    return jsonify(existing_item.serialize)
+
+
 @main.route("/orders/items/<int:item_id>", methods=["DELETE"])
 def delete_item(item_id):
     try:
         db.session.query(Item).filter_by(id=item_id).delete()
         db.session.commit()
-    except: 
+    except Exception as e: 
+        print(e)
         raise "something went wrong"
 
     return jsonify({

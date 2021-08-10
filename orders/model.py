@@ -24,7 +24,7 @@ class Item(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-	        "enduser": self.quantity,
+	        "enduser": self.enduser,
 			"extra_details": self.extra_details,
 			"specs": self.specs,
 			"quantity": self.quantity,

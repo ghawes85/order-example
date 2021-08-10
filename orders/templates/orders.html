@@ -12,7 +12,6 @@
 				<div class="col text-center">
 					<a href="#">
 						<img alt="Logo" width="50px" , height="auto" src="/static/img/parcel.png" />
-
 					</a>
 				</div>
 				<!--end of col-->
@@ -23,13 +22,11 @@
 			<div class="row justify-content-center">
 				<div class="col-12 col-lg-10">
 					<div class="card card-lg">
-
 						<form class="wizard justify-content-left align-items-center" method="POST">
 							{{ form.hidden_tag() }}
 							<ul class="nav nav-tabs text-center row justify-content-center">
 								<li class="col-3 col-md-2"><a href="#first" class="step-circle step-circle-sm">1</a>
 								</li>
-
 							</ul>
 							<div>
 								<div id="first">
@@ -60,12 +57,14 @@
 															class="table table-striped table-hover">
 															<thead>
 																<tr>
+																	<th>Select</th>
 																	<th>Vendor</th>
 																	<th>Part</th>
 																	<th text-align="center">Quantity</th>
 																	<th class="d-none">EndUser</th>
 																	<th class="d-none">Details</th>
 																	<th class="d-none">Specs</th>
+																	<th text-align="center">Edit</th>
 																	<th text-align="center">Remove</th>
 																</tr>
 															</thead>
@@ -87,14 +86,16 @@
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
 																	<td class="d-none"></td>
+																	<td>
+																		<span class="edit"><i class="icon-pencil"
+																			title="Delete"></i></span>
+																	</td>
 																	<td text-align="center">
 																		<span class="delete"><i class="icon-trash"
 																				title="Delete"></i></span>
 																	</td>
 																</tr>
 																{% endfor %}
-
-
 															</tbody>
 														</table>
 
@@ -173,22 +174,88 @@
 														</div>
 													</div>
 												</div>
+												<!-- Edit Modal HTML -->
+												<div id="editProductModal" class="modal fade">
+													<div class="modal-dialog">
+														<div class="modal-content">
+
+															<div class="modal-header">
+																<h4 class="modal-title">Edit Product</h4>
+																<button type="button" class="close" data-dismiss="modal"
+																	aria-hidden="true">&times;</button>
+															</div>
+															<div class="modal-body">
+
+																<input id="itemId" class="d-none" />
+																<div class="form-group">
+																	{{form.vendor.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.vendor(class_="form-control
+																		form-control-lg", id="vendorU", placeholder="vendor") }}
+																	</div>
+																</div>
+																<div class="form-group">
+																	{{form.part.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.part(class_="form-control
+																		form-control-lg", id="partU", placeholder="") }}
+																	</div>
+																</div>
+																<div class="form-group">
+																	{{form.quantity.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.quantity(class_="form-control
+																		form-control-lg", id="quantityU", placeholder="") }}
+																	</div>
+																</div>
+																<div class="form-group">
+																	{{form.enduser.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.enduser(class_="form-control
+																		form-control-lg", id="endUserU", placeholder="") }}
+																	</div>
+																</div>
+																<div class="form-group">
+																	{{form.extra_details.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.extra_details(class_="form-control
+																		form-control-lg", id="extra_detailsU", placeholder="") }}
+																	</div>
+																</div>
+																<div class="form-group">
+																	{{form.specs.label(class_="col-sm-4
+																	col-form-label")}}
+																	<div class="col-sm-8">
+																		{{ form.specs(class_="form-control
+																		form-control-lg", id="specsU", placeholder="") }}
+																	</div>
+																</div>
+
+															</div>
+															<div class="modal-footer">
+																<input type="button" class="btn btn-default"
+																	data-dismiss="modal" value="Cancel">
+																<input type="button" class="btn btn-success updateItem" value="Update"
+																	data-dismiss="modal">
+															</div>
+
+														</div>
+													</div>
+												</div>
 											</div>
 											{{ form.submit2(class="btn btn-lg btn-primary") }}
 										</div>
 										<!--end of col-->
 									</div>
 									<!--end of row-->
-
-
-
 								</div>
-
-
 						</form>
-
 					</div>
-
 				</div>
 				<!--end of col-->
 			</div>
@@ -229,34 +296,104 @@
 		.then(response => response.json())
 		.then(data => {
 				document.getElementById("myTable").insertRow(-1).innerHTML =
-				`<td> ${data.vendor}  </td>
+				`
+				<td>
+					<span class="custom-checkbox">
+						<input type="checkbox" id="checkbox1"
+							name="options[]" value="1">
+						<label for="checkbox1"></label>
+					</span>
+				</td>
+				<td> ${data.vendor}  </td>
 				<td> ${data.part} </td>
 				<td class="d-none id">${data.id}</td>
 				<td class="d-none"> ${data.enduser}  </td>  
 				<td class="d-none">  ${data.extra_details}  </td> 
 				<td class="d-none">  ${data.specs}  </td>  
 				<td> ${data.quantity}  </td> 
-				<td text-align="center"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>`;
+				<td text-align="center"><span class="edit"><i class="icon-pencil" title="Edit"></i></span></td>
+				<td text-align="center"><span class="delete"><i class="icon-trash" title="Delete"></i></span></td>
+				`;
 			})
 		.catch(err => console.log(err));
 		
 	})
 
-	$("#myTable").on('click', '.delete', function () {
-			var id = $(this).parents("tr").find('.id').text()
-			console.log(id)
-			 fetch(`/orders/items/${id}`, {
-				method: "DELETE"
-			})
+	$(".updateItem").click(function () {
+		console.log("Hello")
+		let vendor_select = document.getElementById('vendorU');
+		let part_select = document.getElementById('partU');
+		let quantity_select = document.getElementById('quantityU');
+
+		let enduser_select = document.getElementById('endUserU');
+		let details_select = document.getElementById('extra_detailsU');
+		let specs_select = document.getElementById('specsU');
+		let id = document.getElementById('itemId').value;
+
+
+		let newItem = {
+			"enduser": enduser_select.value,
+			"extra_details": details_select.value,
+			"specs": specs_select.value,
+			"quantity": quantity_select.value,
+			"part": part_select.value,
+			"vendor": vendor_select.value,
+		}
+
+		fetch(`/orders/items/${id}`, {
+			method: "PATCH",
+			body: JSON.stringify(newItem),
+			headers: { "Content-type": "application/json; charset=UTF-8" }
+		})
+		.then(response => response.json())
+		.then(data => {
+			window.location.reload();
+		})
+		.catch(err => console.log(err));
+		
+	})
+
+		$("#myTable").on('click', '.delete', function () {
+				var id = $(this).parents("tr").find('.id').text()
+				console.log(id)
+				fetch(`/orders/items/${id}`, {
+					method: "DELETE"
+				})
 				.then(response => response.json())
 				.then(resp => {
-					$(this).closest('tr').remove();
+						$(this).closest('tr').remove();
 				})
 				.catch(err => {
-					alert("Something Went wrong when deleting item with id " + id)
-				})
+				alert("Something Went wrong when deleting item with id " + id)
+			})
 		});
-})
+		$("#myTable").on('click', '.edit', function () {
+			var id = $(this).parents("tr").find('.id').text()
+			$('#editProductModal').modal('show')
+			$('#editProductModal').on('shown.bs.modal', function (e) {
+				fetch(`/orders/items/${id}`, {
+					method: "GET"
+				})
+				.then(response => response.json())
+				.then(resp => {
+					const { id, vendor, enduser, specs, quantity, part, extra_details} = resp;
+					document.getElementById('itemId').value = id
+					document.getElementById('vendorU').value = vendor;
+					document.getElementById('partU').value = part;
+					document.getElementById('quantityU').value = quantity;
+					document.getElementById('endUserU').value = enduser;
+					document.getElementById('extra_detailsU').value = extra_details;
+					document.getElementById('specsU').value = specs;
+
+					console.log(document.getElementById('itemId').value)
+				})
+				.catch(err => {
+				console.log(err)
+			})
+			
+		})
+	});
+	})
 </script>
 
 <script type="text/javascript">
